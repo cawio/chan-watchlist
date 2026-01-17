@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-body {
+  flex: 1;
+  min-height: 0; // IMPORTANT for flex + scrolling
+}
+
+mat-drawer-container {
+  height: 100%;
+}
