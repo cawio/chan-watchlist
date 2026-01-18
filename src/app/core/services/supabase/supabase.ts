@@ -39,4 +39,27 @@ export class Supabase {
   async signOut() {
     await this.supabase.auth.signOut();
   }
+
+  async invokeFunction<
+    TResponse,
+    TBody extends
+      | string
+      | File
+      | Blob
+      | ArrayBuffer
+      | FormData
+      | ReadableStream<Uint8Array<ArrayBufferLike>>
+      | Record<string, unknown>
+      | undefined = Record<string, unknown>,
+  >(name: string, body: TBody) {
+    const { data, error } = await this.supabase.functions.invoke<TResponse>(name, {
+      body,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
 }

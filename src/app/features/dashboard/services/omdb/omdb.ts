@@ -1,13 +1,12 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '@env/environment';
-import { lastValueFrom } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { Supabase } from '@services/supabase/supabase';
 
-interface ReqPayload {
+export interface ReqPayload extends Record<string, unknown> {
   search: string;
 }
 
-interface OmdbSearchItem {
+export interface OmdbSearchItem {
   Title: string;
   Year: string;
   imdbID: string;
@@ -15,7 +14,7 @@ interface OmdbSearchItem {
   Poster: string;
 }
 
-interface OmdbSearchResponse {
+export interface OmdbSearchResponse {
   Search: OmdbSearchItem[];
   totalResults: string;
   Response: 'True' | 'False';
@@ -25,12 +24,12 @@ interface OmdbSearchResponse {
   providedIn: 'root',
 })
 export class Omdb {
-  private readonly http = inject(HttpClient);
-  private functionUrl = environment.supabaseUrl + '/functions/v1/bright-responder';
+  private readonly supabase = inject(Supabase);
 
-  async search(payload: ReqPayload): Promise<OmdbSearchResponse> {
-    const result = await lastValueFrom(
-      this.http.post<OmdbSearchResponse>(this.functionUrl, payload),
+  async search(payload: ReqPayload): Promise<OmdbSearchResponse | null> {
+    const result = await this.supabase.invokeFunction<OmdbSearchResponse>(
+      'bright-responder',
+      payload,
     );
     return result;
   }
