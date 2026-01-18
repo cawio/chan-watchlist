@@ -1,11 +1,26 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { Supabase } from '@services/supabase/supabase';
 
 @Component({
   selector: 'app-header',
-  imports: [MatToolbarModule],
+  imports: [MatToolbarModule, MatButtonModule, MatMenuModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Header {}
+export class Header {
+  private readonly supabase = inject(Supabase);
+
+  readonly user = this.supabase.user;
+
+  signIn() {
+    this.supabase.signInWithDiscord();
+  }
+
+  signOut() {
+    this.supabase.signOut();
+  }
+}

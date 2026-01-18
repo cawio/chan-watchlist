@@ -1,3 +1,14 @@
 <mat-toolbar>
   <span>Chan Watchlist</span>
+  <span class="spacer"></span>
+  @if (!user()) {
+    <button mat-button (click)="signIn()">Sign in with Discord</button>
+  } @else {
+    <button matButton [matMenuTriggerFor]="userMenu">
+      {{ user()?.email }}
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="signOut()">Sign out</button>
+    </mat-menu>
+  }
 </mat-toolbar>
