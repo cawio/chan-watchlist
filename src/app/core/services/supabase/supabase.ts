@@ -60,6 +60,7 @@ export class Supabase {
       throw error;
     }
 
+    console.log(data);
     return data;
   }
 }

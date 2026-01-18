@@ -31,6 +31,7 @@ export class Omdb {
       'bright-responder',
       payload,
     );
+    console.log(result);
     return result;
   }
 }
