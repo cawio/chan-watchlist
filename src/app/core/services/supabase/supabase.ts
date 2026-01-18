@@ -8,6 +8,7 @@ import { Callback } from 'src/app/features/auth/callback/callback';
 })
 export class Supabase {
   private supabase: SupabaseClient;
+  private sessionLoaded = false;
 
   readonly session = signal<Session | null>(null);
   readonly user = computed(() => this.session()?.user ?? null);
@@ -17,10 +18,12 @@ export class Supabase {
 
     this.supabase.auth.getSession().then(({ data }) => {
       this.session.set(data.session);
+      this.sessionLoaded = true;
     });
 
     this.supabase.auth.onAuthStateChange((_event, session) => {
       this.session.set(session);
+      this.sessionLoaded = true;
     });
   }
 
@@ -38,6 +41,23 @@ export class Supabase {
 
   async signOut() {
     await this.supabase.auth.signOut();
+  }
+
+  async getOrLoadSession(): Promise<Session | null> {
+    if (this.sessionLoaded) {
+      return this.session();
+    }
+
+    const { data, error } = await this.supabase.auth.getSession();
+
+    if (error) {
+      console.error('Session fetch error:', error);
+      return null;
+    }
+
+    this.session.set(data.session);
+    this.sessionLoaded = true;
+    return data.session;
   }
 
   async invokeFunction<
