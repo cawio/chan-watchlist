@@ -1,7 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment';
-import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js';
-import { Callback } from 'src/app/features/auth/callback/callback';
+import { createClient, SupabaseClient, Session } from '@supabase/supabase-js';
 
 @Injectable({
   providedIn: 'root',
@@ -40,7 +39,14 @@ export class Supabase {
   }
 
   async signOut() {
-    await this.supabase.auth.signOut();
+    const { error } = await this.supabase.auth.signOut();
+
+    if (error) {
+      console.error('Sign out error:', error);
+      return;
+    }
+
+    window.location.assign('/');
   }
 
   async getOrLoadSession(): Promise<Session | null> {

@@ -1,0 +1,26 @@
+<section class="landing" aria-labelledby="landing-title">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+
+  <div class="content">
+    <h1 id="landing-title" class="title">Watchlist</h1>
+    <p class="subtitle">Track shows and films with a clean, focused dashboard.</p>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="login-button"
+      (click)="onLogin()"
+      [disabled]="loggingIn()"
+      aria-label="Login with Discord"
+      type="button"
+    >
+      <mat-icon svgIcon="discord" aria-hidden="true" class="icon"></mat-icon>
+      <span>Login with Discord</span>
+    </button>
+
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+  </div>
+</section>

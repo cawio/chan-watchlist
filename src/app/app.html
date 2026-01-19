@@ -1,10 +1,12 @@
-<app-header />
+@if (isAuthenticated()) {
+  <app-header />
+}
 
 <div class="app-body">
   <mat-drawer-container>
     <mat-drawer mode="side"> Drawer content </mat-drawer>
 
-    <mat-drawer-content>
+    <mat-drawer-content [style.max-height]="getMaxContentHeight()">
       <router-outlet />
     </mat-drawer-content>
   </mat-drawer-container>
