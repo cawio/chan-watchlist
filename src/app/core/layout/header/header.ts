@@ -16,8 +16,8 @@ export class Header {
 
   readonly user = this.supabase.user;
 
-  signIn() {
-    this.supabase.signInWithDiscord();
+  constructor() {
+    console.log(this.user());
   }
 
   signOut() {
